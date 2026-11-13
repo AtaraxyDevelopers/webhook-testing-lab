@@ -1,0 +1,24 @@
+{
+  "name": "@ataraxydevelopers/webhook-testing-lab",
+  "version": "0.1.0",
+  "description": "A local signed webhook receiver and sender with replay and duplicate handling.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "license": "MIT",
+  "author": "Ataraxy Developers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AtaraxyDevelopers/webhook-testing-lab.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AtaraxyDevelopers/webhook-testing-lab/issues"
+  },
+  "scripts": {
+    "test": "node --test",
+    "start": "node src/cli.mjs",
+    "demo": "node examples/demo.mjs",
+    "send": "node src/send.mjs"
+  }
+}
