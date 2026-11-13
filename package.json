@@ -1,6 +1,6 @@
 {
   "name": "@ataraxydevelopers/webhook-testing-lab",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A local signed webhook receiver and sender with replay and duplicate handling.",
   "type": "module",
   "engines": {
@@ -19,6 +19,9 @@
     "test": "node --test",
     "start": "node src/cli.mjs",
     "demo": "node examples/demo.mjs",
-    "send": "node src/send.mjs"
+    "send": "node src/send.mjs",
+    "setup:local": "node scripts/setup-local.mjs",
+    "start:local": "node --env-file=.env src/cli.mjs",
+    "send:local": "node --env-file=.env src/send.mjs"
   }
 }

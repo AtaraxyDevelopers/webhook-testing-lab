@@ -5,7 +5,7 @@ try {
   const args = process.argv.slice(2);
   if (args.length > 2) throw new Error('Usage: npm run send -- [event-id] [local-url]');
   const response = await sendEvent(
-    args[1] ?? 'http://127.0.0.1:4320/webhooks',
+    args[1] ?? 'http://127.0.0.1:' + (process.env.PORT ?? '4320') + '/webhooks',
     {
       id: args[0] ?? 'demo-event-1',
       type: 'order.created',

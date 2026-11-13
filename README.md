@@ -9,7 +9,11 @@ An open-source project from [Ataraxy Developers](https://github.com/AtaraxyDevel
 
 ## Quick start
 
-Requires Node.js 22 or 24 and npm. Git is optional if you download the source ZIP.
+Install [Node.js](https://nodejs.org/en/download) 22 or 24 (npm is included). Check
+`node --version` and `npm --version` in your terminal. The commands below run from
+this repository's root folder, the one containing `package.json`.
+
+**With Git:**
 
 ```sh
 git clone https://github.com/AtaraxyDevelopers/webhook-testing-lab.git
@@ -17,6 +21,15 @@ cd webhook-testing-lab
 npm ci
 npm test
 ```
+
+**Without Git:** choose **Code → Download ZIP** on GitHub, extract the archive,
+and open a terminal in the extracted `webhook-testing-lab-main` folder (release archives may
+include the version in the folder name). Run `npm ci` and `npm test` there.
+Use the **source-code ZIP**, not an npm `.tgz` package, to follow this developer walkthrough.
+The install step may need internet access; the examples run locally afterward.
+
+On Windows PowerShell, if `npm.ps1` is blocked by execution policy, use `npm.cmd`
+in place of `npm` in these commands. No execution-policy change is required.
 
 Run a complete local delivery, duplicate, and expired-signature demonstration:
 
@@ -26,23 +39,40 @@ npm run demo
 
 ## Run the receiver and sender separately
 
-Generate a secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`.
-Set `WEBHOOK_SECRET` to the generated value in **both terminals**. PowerShell uses
-`$env:WEBHOOK_SECRET = 'your-generated-value'`; bash/zsh uses
-`export WEBHOOK_SECRET='your-generated-value'`. Then:
+In the repository root, run this **once** to create a local `.env` containing a
+random secret shared by both commands. Its value is not printed or committed.
 
 ```sh
-# Terminal 1
-npm start
-# Terminal 2
-npm run send -- demo-event-1
-npm run send -- demo-event-1
+npm run setup:local
 ```
 
-First delivery returns 202; an exact duplicate returns 200 with duplicate:true.
-Changing bytes for the same event ID returns 409. Inspect synthetic received events
-with GET **http://127.0.0.1:4320/events**. Set PORT to change the receiver port and
-pass the matching URL as the sender's second argument.
+If `.env` already exists, setup refuses to overwrite it. Keep it and continue.
+Open two terminals in the same repository folder.
+
+**Terminal 1:**
+
+```sh
+npm run start:local
+```
+
+Wait for `Webhook lab: http://127.0.0.1:4320` and leave that terminal running.
+
+**Terminal 2:**
+
+```sh
+npm run send:local -- demo-event-1
+npm run send:local -- demo-event-1
+```
+
+The first delivery returns 202; the exact duplicate returns 200 with duplicate:true.
+Open **http://127.0.0.1:4320/events** in a browser to inspect the synthetic event.
+Press **Ctrl+C** in Terminal 1 when finished. Restarting clears the in-memory events.
+
+Change PORT in `.env` to use a different port; both local commands read it. A URL
+passed as the sender's second argument overrides the default. To supply configuration
+through your shell instead, use the original `npm start` and `npm run send -- demo-event-1`
+commands with the same WEBHOOK_SECRET (at least 16 characters) in both terminals.
+Existing shell variables take precedence over values in the env file.
 
 ## Signature protocol
 
@@ -64,6 +94,10 @@ and provider-specific retry and verification policies.
 
 Tests cover tampered/expired/future signatures, duplicate delivery, ID conflicts,
 capacity, invalid JSON, invalid events, oversized bodies, and nonlocal targets.
+
+## Expected first run
+
+The self-contained demo prints 202 for the first event, 200 for the duplicate, and 401 for an expired signature, then exits successfully.
 
 ## Contributing and support
 
