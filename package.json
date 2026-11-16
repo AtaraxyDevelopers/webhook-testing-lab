@@ -1,6 +1,6 @@
 {
   "name": "@ataraxydevelopers/webhook-testing-lab",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A local signed webhook receiver and sender with replay and duplicate handling.",
   "type": "module",
   "engines": {
